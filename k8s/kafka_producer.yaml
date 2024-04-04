@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-producer
+  name: kafka-producer
+spec:
+  selector:
+    matchLabels:
+      app: kafka-producer
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kafka-producer
+    spec:
+      containers:
+      - image: docker.io/library/kafka_producer
+        name: "kafka-producer"
+        env:
+        - name: "SPRING_KAFKA_PRODUCER_BOOTSTRAP_SERVERS"
+          value: "broker:29092"
+        - name: "TOPIC"
+          value: "test-input"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits: 
+            cpu: 250m
+            memory: 250M
+      restartPolicy: Always
+    

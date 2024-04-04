@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "application.topic.input.name",
+    "type": "java.lang.String",
+    "description": "name of the topic the application will create"
+  },
+  {
+    "name": "application.topic.input.threshold",
+    "type": "java.lang.String",
+    "description": "Divide and conquer threading"
+  },
+  {
+    "name": "application.topic.error",
+    "type": "java.lang.String",
+    "description": "error topic the unit of work will spill to"
+  }
+]}

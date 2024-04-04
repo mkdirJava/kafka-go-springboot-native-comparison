@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-consumer-spring
+  name: kafka-consumer-spring
+spec:
+  selector:
+    matchLabels:
+      app: kafka-consumer-spring
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer-spring
+    spec:
+      containers:
+      - image: docker.io/library/lloyds:0.0.1-SNAPSHOT
+        name: "kafka-consumer-spring"
+        env:
+        - name: "SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS"
+          value: "broker:29092"
+        - name: "TOPIC"
+          value: "test-input"
+        - name : "SPRING_KAFKA_CONSUMER_GROUP_ID"
+          value: "spring-j"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits: 
+            cpu: 250m
+            memory: 500M
+      restartPolicy: Always
+    
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: kafka-consumer-spring
+spec:
+  maxReplicas: 3
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: kafka-consumer-spring
+  targetCPUUtilizationPercentage: 90

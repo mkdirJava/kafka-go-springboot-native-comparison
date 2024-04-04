@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "application.topic",
+  "type": "java.lang.String",
+  "description": "name of the topic the sender will send to"
+}]}

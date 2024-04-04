@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-consumer-go
+  name: kafka-consumer-go
+spec:
+  selector:
+    matchLabels:
+      app: kafka-consumer-go
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer-go
+    spec:
+      containers:
+      - image: docker.io/library/kafka_consumer_go
+        name: "kafka-consumer-go"
+        env:
+        - name: "BOOTSTRAP_SERVERS"
+          value: "broker:29092"
+        - name: "TOPIC"
+          value: "test-input"
+        - name: "GROUP_ID"
+          value: "go-client"          
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits: 
+            cpu: 250m
+            memory: 250M
+      restartPolicy: Always
+    

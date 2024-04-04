@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: kafka-consumer-spring-native
+  name: kafka-consumer-spring-native
+spec:
+  selector:
+    matchLabels:
+      app: kafka-consumer-spring-native
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: kafka-consumer-spring-native
+    spec:
+      containers:
+      - image: docker.io/library/kafka_consumer_spring_native
+        name: "kafka-consumer-spring-native"
+        env:
+        - name: "SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS"
+          value: "broker:29092"
+        - name: "TOPIC"
+          value: "test-input"
+        - name : "SPRING_KAFKA_CONSUMER_GROUP_ID"
+          value: "spring-native"    
+        - name: "APPLICATION_TOPIC_INPUT_THRESHOLD"
+          value: "250"
+        - name: "APPLICATION_TOPIC_ERROR"
+          value: "error-output"
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits: 
+            cpu: 250m
+            memory: 500M
+      restartPolicy: Always
+    
